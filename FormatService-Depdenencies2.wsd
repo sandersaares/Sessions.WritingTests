@@ -1,0 +1,35 @@
+@startuml
+
+[ImageFormatting] as IF #skyblue
+[TemporaryDirectory] #skyblue
+[ImageMagick] #skyblue
+
+() IImageDownloader #skyblue
+[HttpImageDownloader] #lightgreen
+[HttpImageDownloader] --> [HttpClient]
+
+() IFormattedImagePublisher #skyblue
+[AzureFormattedImagePublisher] #lightgreen
+[AzureFormattedImagePublisher] --> [Azure Storage API]
+
+IImageDownloader -left- [HttpImageDownloader]
+IFormattedImagePublisher -right- [AzureFormattedImagePublisher]
+
+[JobsController] -left-> IF #blue : **imageFormats, httpClient, publisher**
+[JobsController] --> [AzureFormattedImagePublisher] : Create
+[JobsController] --> [RealHttpClient] : Create
+
+IF --> [ImageMagick]
+IF --> [TemporaryDirectory]
+
+IF -left-> IImageDownloader
+IF -right-> IFormattedImagePublisher
+
+[JobsController] --> [Image formats] : Load
+[Image formats] --> [Program.Configuration]
+[Program.Configuration] --> [appconfig.json]
+
+[AzureFormattedImagePublisher] --> [Azure Storage\nconnection string]
+[Azure Storage\nconnection string] -down-> [Program.Configuration]
+
+@enduml

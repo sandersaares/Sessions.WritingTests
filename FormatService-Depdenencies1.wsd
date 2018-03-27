@@ -1,0 +1,33 @@
+@startuml
+
+[ImageFormatting] as IF #skyblue
+[ImageMagick] #skyblue
+[TemporaryDirectory] #skyblue
+[Azure Storage API] #skyblue
+[Azure storage account] #skyblue
+[Image formats] #skyblue
+[Azure Storage\nconnection string] #skyblue
+[Program.Configuration] #skyblue
+[appconfig.json] #skyblue
+[HttpClient] #skyblue
+[http://.../input.png] as URL #skyblue
+
+[JobsController] -> IF
+
+IF --> [ImageMagick]
+IF --> [TemporaryDirectory]
+IF --> [Azure Storage API]
+[Azure Storage API] --> [Azure storage account]
+
+IF --> [Image formats]
+[Image formats] -down-> [Program.Configuration]
+
+IF --> [Azure Storage\nconnection string]
+[Azure Storage\nconnection string] -down-> [Program.Configuration]
+
+IF --> [HttpClient]
+[HttpClient] --> URL
+
+[Program.Configuration] --> [appconfig.json]
+
+@enduml
